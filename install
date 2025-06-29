@@ -17,7 +17,7 @@ command -v apt >/dev/null || error "apt: command not found. Most likely this sys
 
 #Ensure running non-arm processor
 if uname -m | grep -qi 'arm\|arm64' ;then
-  error "Pi-Apps-x86 is not supported on ARM CPU architectures. We encourage you to the original Pi-Apps Store: https://github.com/Botspot/pi-apps"
+  error "Pi-Apps-x86 is not supported on ARM CPU architectures. We encourage you to the original Pi-Apps Store: https://github.com/Pi-Apps-Recreates/pi-apps"
 fi
 
 sudo apt update || error "The command 'sudo apt update' failed. Before Pi-Apps-x86 will work, you must fix your apt package-management system."
@@ -51,14 +51,14 @@ if [ -d "$DIRECTORY" ];then
     #This two-tiered approach prevents unnecessary GitHub API calls and speeds up script's execution for normal usage.
     
     command -v curl >/dev/null || sudo apt install -y curl
-    upstream_git_date="$(curl https://api.github.com/repos/Botspot/pi-apps-x86/commits/master 2>&1 | grep '"date":' | tail -n 1 | sed 's/"date"://g' | xargs date +%s -d 2>/dev/null)"
+    upstream_git_date="$(curl https://api.github.com/repos/pi-apps-recreates/pi-apps-x86/commits/master 2>&1 | grep '"date":' | tail -n 1 | sed 's/"date"://g' | xargs date +%s -d 2>/dev/null)"
     
     if [[ "$upstream_git_date" =~ ^[0-9]+$ ]] && ([ -z "$current_git_date" ] || [ "$upstream_git_date" -gt $(($current_git_date + 30*60*60*24)) ]);then
       rm -rf ~/pi-apps-x86-forced-update
       
       echo "Reinstalling pi-apps-x86..."
       downloaded=1
-      output="$(git clone --depth 1 https://github.com/Botspot/pi-apps-x86 ~/pi-apps-x86-forced-update 2>&1)"
+      output="$(git clone --depth 1 https://github.com/Pi-Apps-Recreates/pi-apps-x86 ~/pi-apps-x86-forced-update 2>&1)"
       if [ $? != 0 ] || [ ! -d "$DIRECTORY" ];then
         error "Pi-Apps-x86 download failed!\ngit clone output was: $output"
       fi
@@ -73,7 +73,7 @@ if [ -d "$DIRECTORY" ];then
 elif [ ! -d "$DIRECTORY" ];then
   echo "Downloading Pi-Apps-x86..."
   downloaded=1
-  output="$(git clone --depth 1 https://github.com/Botspot/pi-apps-x86 "$DIRECTORY" 2>&1)"
+  output="$(git clone --depth 1 https://github.com/Pi-Apps-Recreates/pi-apps-x86 "$DIRECTORY" 2>&1)"
   if [ $? != 0 ] || [ ! -d "$DIRECTORY" ];then
     error "Pi-Apps-x86 download failed!\ngit clone output was: $output"
   fi
@@ -168,7 +168,7 @@ fi
 
 #Determine message of the day. If announcements file missing or over a day old, download it.
 if [ ! -f "${DIRECTORY}/data/announcements" ] || [ ! -z "$(find "${DIRECTORY}/data/announcements" -mtime +1 -print)" ]; then
-  wget https://raw.githubusercontent.com/Botspot/pi-apps-announcements/main/message -qO "${DIRECTORY}/data/announcements"
+  wget https://raw.githubusercontent.com/Pi-Apps-Recreates/pi-apps-announcements/main/message -qO "${DIRECTORY}/data/announcements"
 fi
 
 if [ $downloaded == 1 ];then
