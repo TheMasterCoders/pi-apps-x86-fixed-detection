@@ -16,7 +16,7 @@ fi
 command -v apt >/dev/null || error "apt: command not found. Most likely this system is not running Debian."
 
 #Ensure running non-arm processor
-if ! uname -m | grep -qi 'arm\|arm64' ;then
+if uname -m | grep -qi 'arm\|arm64' ;then
   error "Pi-Apps-x86 is not supported on ARM CPU architectures. We encourage you to the original Pi-Apps Store: https://github.com/Botspot/pi-apps"
 fi
 
